@@ -15,6 +15,16 @@ CHANNEL_NAME = '<channel_name>'
 USERNAME = '<user_name>'
 TOKEN = '<slack_token>'
 
+Slack.configure do |config|
+  config.token = TOKEN
+end
+Slack.auth_test
+
+def notify_to_slack(text)
+  return if text.nil?
+  Slack.chat_postMessage text: text, username: USERNAME, channel: CHANNEL_NAME
+end
+
 Trello.configure do |config|
   config.consumer_key = CONSUMER_KEY
   config.consumer_secret = CONSUMER_SECRET
@@ -38,14 +48,4 @@ list.cards.each do |c|
     print "#{text}\n"
     notify_to_slack(text)
   end
-end
-
-Slack.configure do |config|
-  config.token = TOKEN
-end
-Slack.auth_test
-
-def notify_to_slack(text)
-  return if text.nil?
-  Slack.chat_postMessage text: text, username: USERNAME, channel: CHANNEL_NAME
 end
